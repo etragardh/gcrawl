@@ -1,0 +1,31 @@
+#!/opt/homebrew/bin/python3
+
+import sys, re, requests
+
+if len(sys.argv) < 4:
+    print("Doin it wrong! atleast 3 parameters")
+    print("./crawl https://domain.com/path '<strong>' '</strong>'")
+    exit()
+
+url=sys.argv[1]
+reg_start=sys.argv[2]
+reg_stop=sys.argv[3]
+
+#data = "<html><strong>hello1</strong><strong>hello2</strong></html>"
+
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'}
+
+try:
+    r = requests.get(url, headers=headers)
+    data = r.text
+#    print(data)
+except requests.exceptions.RequestException as e:
+    raise SystemExit(e)
+
+regex=reg_start + '(.*?)' + reg_stop
+matches = re.findall(regex,data)
+
+for match in matches:
+    print (match.strip())
+
+#print(match)
